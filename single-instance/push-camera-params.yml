@@ -1,0 +1,5 @@
+---
+# Camera Parameter Update
+- include: launch-gce-instance.yml
+- include: run-camera-param-test.yml
+- include: push-config-to-satellite.yml
