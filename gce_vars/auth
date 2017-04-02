@@ -1,0 +1,9 @@
+---
+# Google Compute Engine required authentication global variables
+project_id: spacebox-cloud
+service_account_email: spacebox-dev@spacebox-cloud.iam.gserviceaccount.com
+credentials_file: /home/supertom/keys/spacebox-cloud.json
+
+#project_id: spacebox-cloud
+#service_account_email: spacebox-dev@spacebox.iam.gserviceaccount.com
+#credentials_file: /home/supertom/keys/spacebox-cloud.json

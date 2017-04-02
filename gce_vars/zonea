@@ -1,0 +1,5 @@
+---
+# Variables defined for us-central1-a
+names_zonea: paramstest1,paramstest2,paramstest3
+zonea: us-central1-a
+lb_membersa: us-central1-a/paramstest1,us-central1-a/paramstest2,us-central1-a/paramstest3,
