@@ -1,3 +1,3 @@
 ---
-- include: rgs-to-ips-network.yml
-#- include: ips-to-iva-network.yml
+- include: rgs-ips-network.yml
+- include: iva-ips-network.yml

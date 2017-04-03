@@ -4,6 +4,32 @@
     - ../gce_vars/auth
     - ../infra_vars/network-prod
   tasks:
+      - name: Delete RGS-IPS SSH Firewall Rule
+        gce_net:
+          name: "{{ rgs_ips_network_name }}"
+          fwname: "{{ rgs_ips_fw_ssh_name }}"
+          allowed: tcp:22
+          state: "absent"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+      - name: Delete RGS-IPS subnetwork
+        gce_net:
+          name: "{{ rgs_ips_network_name }}"
+          ipv4_range: "{{ rgs_ips_ip4_range }}"
+          mode: auto
+          state: "absent"
+          subnet_name: "{{ rgs_ips_subnet_name }}"
+          subnet_region: "{{ rgs_ips_subnet_region }}"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert network deleted"
+        assert:
+          that:
+            # - 'result.changed'
+            - 'result.state == "absent"'
       - name: Delete RGS-IPS network
         gce_net:
           name: "{{ rgs_ips_network_name }}"
@@ -19,6 +45,15 @@
           that:
             # - 'result.changed'
             - 'result.state == "absent"'
+      - name: Delete IVA-IPS SSH Firewall Rule
+        gce_net:
+          name: "{{ iva_ips_network_name }}"
+          fwname: "{{ iva_ips_fw_ssh_name }}"
+#          allowed: tcp:22
+          state: "absent"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
 
       - name: Delete IVA-IPS network
         gce_net:

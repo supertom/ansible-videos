@@ -1,0 +1,39 @@
+- name: RGS/IPS Network (prod)
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../infra_vars/network-prod
+  tasks:
+      - name: Create RGS-IPS network
+        gce_net:
+          name: "{{ rgs_ips_network_name }}"
+          ipv4_range: "{{ rgs_ips_ip4_range }}"
+          mode: custom
+          subnet_name: "{{ rgs_ips_subnet_name }}"
+          subnet_region: "{{ rgs_ips_subnet_region }}"
+          state: "present"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert network created"
+        assert:
+          that:
+            - 'result.state == "present"'
+      - name: Create SSH Firewall Rule
+        gce_net:
+          name: "{{ rgs_ips_network_name }}"
+          fwname: "{{ rgs_ips_fw_ssh_name }}"
+          allowed: tcp:22;tcp:1234
+          state: "present"
+          target_tags: "{{ rgs_ips_fw_ssh_target_tags }}"
+          src_range: ["{{ rgs_ips_fw_ssh_src_range }}"]
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert fw created"
+        assert:
+          that:
+            - 'result.changed'
+            - 'result.state == "present"'

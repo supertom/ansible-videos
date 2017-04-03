@@ -1,27 +1,10 @@
-- name: RGS/IPS Network (prod)
+- name: Compute Engine Network
   hosts: localhost
   vars_files:
     - ../gce_vars/auth
     - ../infra_vars/network-prod
   tasks:
-      - name: Create RGS-IPS network
-        gce_net:
-          name: "{{ rgs_ips_network_name }}"
-          ipv4_range: "{{ rgs_ips_ip4_range }}"
-          mode: custom
-          subnet_name: "{{ rgs_ips_subnet_name }}"
-          subnet_region: "{{ rgs_ips_subnet_region }}"
-          state: "present"
-          project_id: "{{ project_id }}"
-          credentials_file: "{{ credentials_file }}"
-          service_account_email: "{{ service_account_email }}"
-        register: result
-      - name: "assert network created"
-        assert:
-          that:
-            # - 'result.changed'
-            - 'result.state == "present"'
-      - name: Create IPS-IPV network
+      - name: Create IPV-IPS network
         gce_net:
           name: "{{ iva_ips_network_name }}"
           ipv4_range: "{{ iva_ips_ip4_range }}"
@@ -36,31 +19,23 @@
           that:
             # - 'result.changed'
             - 'result.state == "present"'
-      # - name: Create Auto Network
-      #   gce_net:
-      #     name: "{{ autonetworkname }}"
-      #     mode: auto
-      #     state: "present"
-      #   register: result
-      # - name: "assert auto network created"
-      #   assert:
-      #     that:
-      #       # - 'result.changed'
-      #       - 'result.state == "present"'
-      # - name: Create Network with custom Subnetwork
-      #   gce_net:
-      #     name: "{{ customnetworkname }}"
-      #     mode: custom
-      #     subnet_name: "{{ subnetworkname }}"
-      #     subnet_region: us-east1
-      #     ipv4_range: '10.240.16.0/24'
-      #     state: "present"
-      #   register: result
-      # - name: "assert subnetwork network created"
-      #   assert:
-      #     that:
-      #       # - 'result.changed'
-      #       - 'result.state == "present"'
+      - name: Create SSH Firewall Rule
+        gce_net:
+          name: "{{ iva_ips_network_name }}"
+          fwname: "{{ iva_ips_fw_ssh_name }}"
+          allowed: tcp:22;icmp
+          state: "present"
+          src_tags: "{{ iva_ips_fw_ssh_src_tags }}"
+          target_tags: "{{ iva_ips_fw_ssh_target_tags }}"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert fw created"
+        assert:
+          that:
+            - 'result.changed'
+            - 'result.state == "present"'
 
       # - name: Create Firewall Rule
       #   gce_net:
