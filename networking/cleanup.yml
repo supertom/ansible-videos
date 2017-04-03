@@ -1,0 +1,36 @@
+- name: Cleanup RGS/IPS Network (prod)
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../infra_vars/network-prod
+  tasks:
+      - name: Delete RGS-IPS network
+        gce_net:
+          name: "{{ rgs_ips_network_name }}"
+          ipv4_range: "{{ rgs_ips_ip4_range }}"
+          mode: auto
+          state: "absent"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert network deleted"
+        assert:
+          that:
+            # - 'result.changed'
+            - 'result.state == "absent"'
+
+      - name: Delete IVA-IPS network
+        gce_net:
+          name: "{{ iva_ips_network_name }}"
+          ipv4_range: "{{ iva_ips_ip4_range }}"
+          state: "absent"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert network deleted"
+        assert:
+          that:
+            # - 'result.changed'
+            - 'result.state == "absent"'

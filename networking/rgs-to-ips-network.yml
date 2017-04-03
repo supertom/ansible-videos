@@ -1,0 +1,172 @@
+- name: RGS/IPS Network (prod)
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../infra_vars/network-prod
+  tasks:
+      - name: Create RGS-IPS network
+        gce_net:
+          name: "{{ rgs_ips_network_name }}"
+          ipv4_range: "{{ rgs_ips_ip4_range }}"
+          mode: custom
+          subnet_name: "{{ rgs_ips_subnet_name }}"
+          subnet_region: "{{ rgs_ips_subnet_region }}"
+          state: "present"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert network created"
+        assert:
+          that:
+            # - 'result.changed'
+            - 'result.state == "present"'
+      - name: Create IPS-IPV network
+        gce_net:
+          name: "{{ iva_ips_network_name }}"
+          ipv4_range: "{{ iva_ips_ip4_range }}"
+          mode: auto
+          state: "present"
+          project_id: "{{ project_id }}"
+          credentials_file: "{{ credentials_file }}"
+          service_account_email: "{{ service_account_email }}"
+        register: result
+      - name: "assert network created"
+        assert:
+          that:
+            # - 'result.changed'
+            - 'result.state == "present"'
+      # - name: Create Auto Network
+      #   gce_net:
+      #     name: "{{ autonetworkname }}"
+      #     mode: auto
+      #     state: "present"
+      #   register: result
+      # - name: "assert auto network created"
+      #   assert:
+      #     that:
+      #       # - 'result.changed'
+      #       - 'result.state == "present"'
+      # - name: Create Network with custom Subnetwork
+      #   gce_net:
+      #     name: "{{ customnetworkname }}"
+      #     mode: custom
+      #     subnet_name: "{{ subnetworkname }}"
+      #     subnet_region: us-east1
+      #     ipv4_range: '10.240.16.0/24'
+      #     state: "present"
+      #   register: result
+      # - name: "assert subnetwork network created"
+      #   assert:
+      #     that:
+      #       # - 'result.changed'
+      #       - 'result.state == "present"'
+
+      # - name: Create Firewall Rule
+      #   gce_net:
+      #     name: default
+      #     fwname: "{{ fwname }}"
+      #     allowed: tcp:80
+      #     state: "present"
+      #     src_tags: "foo,bar"
+      #     src_range: ['10.2.1.1/32']
+      #   register: result
+      # - name: "assert fw created"
+      #   assert:
+      #     that:
+      #       - 'result.changed'
+      #       - 'result.state == "present"'
+      # - name: Update Firewall Rule
+      #   gce_net:
+      #     name: default
+      #     fwname: "{{ fwname }}"
+      #     allowed: tcp:81
+      #     state: "present"
+      #     src_tags: "foo,bar,baz"
+      #   register: result
+      # - name: "assert fw updated"
+      #   assert:
+      #     that:
+      #       - 'result.changed'
+      #       - 'result.state == "present"'
+      #       - 'result.src_tags|length == 3'
+      # - name: Update Firewall Rule w/icmp (no port)
+      #   gce_net:
+      #     name: default
+      #     fwname: "{{ fwname }}"
+      #     allowed: tcp:81;icmp
+      #     state: "present"
+      #     src_tags: "foo,bar,baz"
+      #   register: result
+      # - name: "assert fw updated"
+      #   assert:
+      #     that:
+      #       - 'result.changed'
+      #       - 'result.state == "present"'
+      #       - 'result.src_tags|length == 3'
+      # - name: Update Firewall Rule w/source range
+      #   gce_net:
+      #     name: default
+      #     fwname: "{{ fwname }}"
+      #     allowed: tcp:81
+      #     state: "present"
+      #     src_tags: "foo,bar,baz"
+      #     src_range: ['10.1.1.1/32']
+      #   register: result
+      # - name: "assert fw updated source range"
+      #   assert:
+      #     that:
+      #       - 'result.changed'
+      #       - 'result.state == "present"'
+      #       - 'result.src_range|length == 1'
+      # - name: Delete Legacy Network
+      #   gce_net:
+      #     name: "{{ legacynetworkname }}"
+      #     state: "absent"
+      #   register: result
+      #   tags: delete
+      # - name: "assert legacy network deleted"
+      #   tags: delete
+      #   assert:
+      #     that:
+      #       # - 'result.changed'
+      #       - 'result.state == "absent"'
+      # - name: Delete auto Network
+      #   gce_net:
+      #     name: "{{ autonetworkname }}"
+      #     state: "absent"
+      #   register: result
+      #   tags: delete
+      # - name: "assert auto network deleted"
+      #   tags: delete
+      #   assert:
+      #     that:
+      #       # - 'result.changed'
+      #       - 'result.state == "absent"'
+      # - name: Delete SubNetwork of Custom Network
+      #   gce_net:
+      #     name: "{{ customnetworkname }}"
+      #     subnet_name: "{{ subnetworkname }}"
+      #     subnet_region: "us-east1"
+      #     state: "absent"
+      #   register: result
+      #   tags: delete
+      # - pause: seconds=30
+      # - name: "assert custom subnetwork deleted"
+      #   tags: delete
+      #   assert:
+      #     that:
+      #       # - 'result.changed'
+      #       - 'result.state == "absent"'
+      # - name: Delete Custom Network
+      #   gce_net:
+      #     name: "{{ customnetworkname }}"
+      #     state: "absent"
+      #   register: result
+      #   tags: delete
+      # - name: "assert custom network deleted"
+      #   tags: delete
+      #   assert:
+      #     that:
+      #       # - 'result.changed'
+      #       - 'result.state == "absent"'

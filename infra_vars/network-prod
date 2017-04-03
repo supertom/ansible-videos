@@ -1,0 +1,10 @@
+# network-prod vars
+## RGS <==> IPS
+rgs_ips_network_name: rgs-ips-prod
+rgs_ips_ip4_range: 10.19.1.0/29
+rgs_ips_subnet_name: rgs-ips-subnet-central
+rgs_ips_subnet_region: us-central1
+
+## IPS <==> IVA
+iva_ips_network_name: ips-ipv-prod
+iva_ips_ip4_range: 10.10.1.0/24
