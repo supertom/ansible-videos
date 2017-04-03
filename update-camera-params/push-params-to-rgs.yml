@@ -4,7 +4,6 @@
   hosts: localhost
   gather_facts: False
   vars_files:
-#    - ../gce_vars/auth
     - ../app_vars/camera-test
   tasks:
     - name: Delete existing file if present
@@ -24,5 +23,14 @@
           value: "{{ cameraB }}"
         - camera: 'cameraC'
           value: "{{ cameraC }}"
-    - name: debug
-      command: cat "{{ local_conf_file }}"
+
+# - name: RGS proxy
+#   hosts: 35.188.15.189
+#   gather_facts: False
+#   vars_files:
+#     - ../app_vars/camera-test
+#   tasks:
+#     - name: Copy camera params to to RGS proxy
+#       copy:
+#         src: "{{ local_conf_file }}"
+#         dest: "{{ local_conf_file }}"

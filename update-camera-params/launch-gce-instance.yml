@@ -1,5 +1,5 @@
 ---
-# play: launch and test on single instance
+# play: launch GCE VMs
 - name: Create Compute Engine instance
   hosts: localhost
   gather_facts: False
