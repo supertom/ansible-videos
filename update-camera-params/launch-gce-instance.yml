@@ -8,7 +8,7 @@
     - ../gce_vars/machines
     - ../gce_vars/zonea
   tasks:
-    - name: Bring up the instances in the first zone
+    - name: Bring up the instances for testing
       gce:
         instance_names: "{{ names_zonea }}"
         machine_type: "{{ machine_type }}"
@@ -19,9 +19,9 @@
         service_account_email: "{{ service_account_email }}"
       register: gcea
   post_tasks:
-    - name: Wait for SSH for instances in first zone
+    - name: Ensure SSH is available
       wait_for: delay=1 host={{ item.public_ip }} port=22 state=started timeout=30
       with_items: "{{ gcea.instance_data }}"
-    - name: Save host data for first zone
+    - name: Save host data
       add_host: hostname={{ item.public_ip }} groupname=camera_test_instances
       with_items: "{{ gcea.instance_data }}"

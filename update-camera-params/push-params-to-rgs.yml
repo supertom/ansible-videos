@@ -1,26 +1,28 @@
 ---
-# compute-video-demo-ansible
-- name: Set up networking
-  hosts: local
+# Send the parameters to the RGS
+- name: Push parameters
+  hosts: localhost
   gather_facts: False
   vars_files:
-    - gce_vars/auth
-    - gce_vars/lb
+#    - ../gce_vars/auth
+    - ../app_vars/camera-test
   tasks:
-    - name: Allow HTTP traffic
-      gce_net:
-        fwname: all-http
-        name: default
-        allowed: tcp:80
-        project_id: "{{ project_id }}"
-        credentials_file: "{{ credentials_file }}"
-        service_account_email: "{{ service_account_email }}"
-    - name: Create the load-balancer and add members
-      gce_lb:
-        name: lb
-        region: "{{ region }}"
-        members: "{{ members }}"
-        project_id: "{{ project_id }}"
-        credentials_file: "{{ credentials_file }}"
-        service_account_email: "{{ service_account_email }}"
-
+    - name: Delete existing file if present
+      file:
+        path: "{{ local_conf_file }}"
+        state: absent
+    - name: Write ini file
+      ini_file:
+        path: "{{ local_conf_file }}"
+        section: camera-params
+        option: "{{ item.camera }}"
+        value: "{{ item.value }}"
+      with_items:
+        - camera: 'cameraA'
+          value: "{{ cameraA }}"
+        - camera: 'cameraB'
+          value: "{{ cameraB }}"
+        - camera: 'cameraC'
+          value: "{{ cameraC }}"
+    - name: debug
+      command: cat "{{ local_conf_file }}"
