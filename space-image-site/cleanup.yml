@@ -4,23 +4,79 @@
     - ../gce_vars/auth
     - ../app_vars/iva-prod
   tasks:
-    # # ============================================================
-    # # Delete URLMap
-    # # ============================================================
-    # - name: Delete URLMap
-    #   gcp_url_map:
-    #     service_account_email: "{{ service_account_email }}"
-    #     credentials_file: "{{ credentials_file }}"
-    #     project_id: "{{ project_id }}"
-    #     url_map_name: "{{ urlmap }}"
-    #     default_service: "{{ bes }}"
-    #     state: "absent"
-    #   register: result
-    # - name: "assert urlmap present"
-    #   assert:
-    #     that:
-    #       - 'result.state == "absent"'
-    # - pause: seconds=10
+    # ============================================================
+    # Delete Global Forwarding Rule
+    # ============================================================
+    - name: Delete Global Forwarding Rule
+      gcp_forwarding_rule:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ gfr }}"
+        target: "{{ targethttpproxy }}"
+        address: "{{ external_address_name }}"
+        port_range: 80
+        region: global
+        state: "absent"
+      register: result
+    - name: "assert gfr absent"
+      assert:
+        that:
+#          - 'result.changed'
+          - 'result.state == "absent"'
+    # ============================================================
+    # Delete Static Address
+    # ============================================================
+    - name: Delete Static Address
+      gce_eip:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ external_address_name }}"
+        region: global
+        state: "absent"
+      register: result
+    - name: "assert static address absent"
+      assert:
+        that:
+#          - 'result.changed'
+          - 'result.state == "absent"'
+
+    # ============================================================
+    # Delete TargetProxy
+    # ============================================================
+    - name: Delete TargetHTTPProxy
+      gcp_target_proxy:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ targethttpproxy }}"
+        urlmap: "{{ urlmap }}"
+        state: "absent"
+      register: result
+    - name: "assert targethttpproxy absent"
+      assert:
+        that:
+#          - 'result.changed'
+          - 'result.state == "absent"'
+
+    # ============================================================
+    # Delete URLMap
+    # ============================================================
+    - name: Delete URLMap
+      gcp_url_map:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        url_map_name: "{{ urlmap }}"
+        default_service: "{{ bes }}"
+        state: "absent"
+      register: result
+    - name: "assert urlmap absent"
+      assert:
+        that:
+          - 'result.state == "absent"'
+    - pause: seconds=10
 
     # ============================================================
     # Delete Backend Service

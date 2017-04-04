@@ -78,60 +78,60 @@
           - 'result.changed'
           - 'result.state == "present"'
 
-#     # ============================================================
-#     # Create TargetProxy
-#     # ============================================================
-#     - name: Create TargetHTTPProxy
-#       gce_net_targetproxy:
-#         service_account_email: "{{ service_account_email }}"
-#         credentials_file: "{{ credentials_file }}"
-#         project_id: "{{ project_id }}"
-#         name: "{{ targethttpproxy }}"
-#         urlmap: "{{ urlmap }}"
-#         state: "present"
-#       register: result
-#     - name: "assert targethttpproxy present"
-#       assert:
-#         that:
-# #          - 'result.changed'
-#           - 'result.state == "present"'
+    # ============================================================
+    # Create TargetProxy
+    # ============================================================
+    - name: Create TargetHTTPProxy
+      gcp_target_proxy:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ targethttpproxy }}"
+        urlmap: "{{ urlmap }}"
+        state: "present"
+      register: result
+    - name: "assert targethttpproxy present"
+      assert:
+        that:
+#          - 'result.changed'
+          - 'result.state == "present"'
 
-#     # ============================================================
-#     # Create Static Address
-#     # ============================================================
-#     - name: Create Static Address
-#       gce_eip:
-#         service_account_email: "{{ service_account_email }}"
-#         credentials_file: "{{ credentials_file }}"
-#         project_id: "{{ project_id }}"
-#         name: "{{ external_address_name }}"
-#         region: global
-#         state: "present"
-#       register: result
-#     - name: "assert static address present"
-#       assert:
-#         that:
-# #          - 'result.changed'
-#           - 'result.state == "present"'
+    # ============================================================
+    # Create Static Address
+    # ============================================================
+    - name: Create Static Address
+      gce_eip:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ external_address_name }}"
+        region: global
+        state: "present"
+      register: result
+    - name: "assert static address present"
+      assert:
+        that:
+#          - 'result.changed'
+          - 'result.state == "present"'
 
-#     # ============================================================
-#     # Create Global Forwarding Rule
-#     # ============================================================
-#     - name: Create Global Forwarding Rule
-#       gce_forwardingrule:
-#         service_account_email: "{{ service_account_email }}"
-#         credentials_file: "{{ credentials_file }}"
-#         project_id: "{{ project_id }}"
-#         name: "{{ gfr }}"
-#         target: "{{ targethttpproxy }}"
-#         address: "{{ address }}"
-#         port_range: 80
-#         region: global
-#         state: "present"
-#       register: result
-#     - name: "assert gfr present"
-#       assert:
-#         that:
-# #          - 'result.changed'
-#           - 'result.state == "present"'
+    # ============================================================
+    # Create Global Forwarding Rule
+    # ============================================================
+    - name: Create Global Forwarding Rule
+      gcp_forwarding_rule:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ gfr }}"
+        target: "{{ targethttpproxy }}"
+        address: "{{ external_address_name }}"
+        port_range: 80
+        region: global
+        state: "present"
+      register: result
+    - name: "assert gfr present"
+      assert:
+        that:
+#          - 'result.changed'
+          - 'result.state == "present"'
 
