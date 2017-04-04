@@ -1,0 +1,62 @@
+- name: Tear down Global IVA Space Site
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../app_vars/iva-prod
+  tasks:
+    # ============================================================
+    # Delete Backend Service
+    # ============================================================
+    - name: Delete BES
+      gcp_backend_service:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        backend_service_name: "{{ bes }}"
+        backends:
+          - instance_group: "{{ mig_one }}"
+          - instance_group: "{{ mig_two }}"
+        healthchecks:
+          - "{{ bes_healthcheck }}"
+        port_name: "{{ http_port_name }}"
+        protocol: HTTP
+        timeout: 60
+        state: "absent"
+      register: result
+    - name: "assert backend service absent"
+      assert:
+        that:
+          # - 'result.changed'
+          - 'result.state == "absent"'
+    # ============================================================
+    # Delete MIG one
+    # ============================================================
+    - name: Delete MIG one
+      gce_mig:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ mig_one }}"
+        zone: "{{ mig_one_zone }}"
+        state: "absent"
+        size: 1
+        template: "{{ instance_template }}"
+        named_ports:
+          - name: "{{ http_port_name }}"
+            port: "{{ http_port }}"
+    # ============================================================
+    # Delete MIG two
+    # ============================================================
+    - name: Delete MIG two
+      gce_mig:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ mig_two }}"
+        zone: "{{ mig_two_zone }}"
+        state: "absent"
+        size: 1
+        template: "{{ instance_template }}"
+        named_ports:
+          - name: "{{ http_port_name }}"
+            port: "{{ http_port }}"

@@ -1,0 +1,13 @@
+mig_one: iva-mig-east
+mig_two: iva-mig-west
+mig_one_zone: us-east1-c
+mig_two_zone: us-west1-b
+http_port_name: iva-httpport
+http_port: 80
+bes: iva-bes
+bes_healthcheck: iva-healthcheck
+urlmap: iva-urlmap
+targethttpproxy: iva-targethttproxy
+instance_template: iva-template
+external_address_name: iva-address
+gfr: iva-gfr

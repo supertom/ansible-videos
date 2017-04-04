@@ -1,0 +1,137 @@
+- name: Build Global IVA Space Site
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../app_vars/iva-prod
+  tasks:
+    # ============================================================
+    # Create MIG one
+    # ============================================================
+    - name: Create MIG one
+      gce_mig:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ mig_one }}"
+        zone: "{{ mig_one_zone }}"
+        state: "present"
+        size: 1
+        template: "{{ instance_template }}"
+        named_ports:
+          - name: "{{ http_port_name }}"
+            port: "{{ http_port }}"
+    # ============================================================
+    # Create MIG two
+    # ============================================================
+    - name: Create MIG two
+      gce_mig:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        name: "{{ mig_two }}"
+        zone: "{{ mig_two_zone }}"
+        state: "present"
+        size: 1
+        template: "{{ instance_template }}"
+        named_ports:
+          - name: "{{ http_port_name }}"
+            port: "{{ http_port }}"
+    # ============================================================
+    # Create Backend Service TODO(supertom): needs update
+    # ============================================================
+    - name: Create BES
+      gcp_backend_service:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        backend_service_name: "{{ bes }}"
+        backends:
+          - instance_group: "{{ mig_one }}"
+          - instance_group: "{{ mig_two }}"
+        healthchecks:
+          - "{{ bes_healthcheck }}"
+        port_name: "{{ http_port_name }}"
+        protocol: HTTP
+        timeout: 60
+        state: "present"
+      register: result
+    - name: "assert backend service present"
+      assert:
+        that:
+          # - 'result.changed'
+          - 'result.state == "present"'
+#     # ============================================================
+#     # Create URLMap TODO(supertom): fix
+#     # ============================================================
+#     - name: Create URLMap
+#       gce_net_urlmap:
+#         service_account_email: "{{ service_account_email }}"
+#         credentials_file: "{{ credentials_file }}"
+#         project_id: "{{ project_id }}"
+#         name: "{{ urlmap }}"
+#         default_service: "{{ bes }}"
+#         state: "present"
+#       register: result
+#     - name: "assert urlmap present"
+#       assert:
+#         that:
+# #          - 'result.changed'
+#           - 'result.state == "present"'
+
+#     # ============================================================
+#     # Create TargetProxy
+#     # ============================================================
+#     - name: Create TargetHTTPProxy
+#       gce_net_targetproxy:
+#         service_account_email: "{{ service_account_email }}"
+#         credentials_file: "{{ credentials_file }}"
+#         project_id: "{{ project_id }}"
+#         name: "{{ targethttpproxy }}"
+#         urlmap: "{{ urlmap }}"
+#         state: "present"
+#       register: result
+#     - name: "assert targethttpproxy present"
+#       assert:
+#         that:
+# #          - 'result.changed'
+#           - 'result.state == "present"'
+
+#     # ============================================================
+#     # Create Static Address
+#     # ============================================================
+#     - name: Create Static Address
+#       gce_eip:
+#         service_account_email: "{{ service_account_email }}"
+#         credentials_file: "{{ credentials_file }}"
+#         project_id: "{{ project_id }}"
+#         name: "{{ external_address_name }}"
+#         region: global
+#         state: "present"
+#       register: result
+#     - name: "assert static address present"
+#       assert:
+#         that:
+# #          - 'result.changed'
+#           - 'result.state == "present"'
+
+#     # ============================================================
+#     # Create Global Forwarding Rule
+#     # ============================================================
+#     - name: Create Global Forwarding Rule
+#       gce_forwardingrule:
+#         service_account_email: "{{ service_account_email }}"
+#         credentials_file: "{{ credentials_file }}"
+#         project_id: "{{ project_id }}"
+#         name: "{{ gfr }}"
+#         target: "{{ targethttpproxy }}"
+#         address: "{{ address }}"
+#         port_range: 80
+#         region: global
+#         state: "present"
+#       register: result
+#     - name: "assert gfr present"
+#       assert:
+#         that:
+# #          - 'result.changed'
+#           - 'result.state == "present"'
+
