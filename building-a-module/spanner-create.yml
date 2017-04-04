@@ -1,0 +1,59 @@
+- name: Create Spanner Instance and Database
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../infra_vars/spanner-prod
+  tasks:
+    # ============================================================
+    - name: "Create Spanner Instance (state==present)"
+      gcspanner:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        instance_id: "{{ instance_id }}"
+        configuration: "{{ configuration }}"
+        instance_display_name: "{{ instance_id }}"
+        state: "present"
+        node_count: 1
+      register: result
+    - name: "assert Spanner instance successful"
+      assert:
+        that:
+          - 'result.state == "present"'
+    # ============================================================
+    - pause: seconds=15
+    # ============================================================
+    - name: "Create Spanner Database (state==present)"
+      gcspanner:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        instance_id: "{{ instance_id }}"
+        instance_display_name: "{{ instance_id }}"
+        database_name: "{{ database_name }}"
+        configuration: "{{ configuration }}"
+        state: "present"
+      register: result
+    - name: "assert Spanner database successful"
+      assert:
+        that:
+          - 'result.state == "present"'
+    # ============================================================
+    - name: "Update Spanner Instance (state==present)"
+      gcspanner:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        instance_id: "{{ instance_id }}"
+        configuration: "{{ configuration }}"
+        instance_display_name: "updated display name"
+        node_count: 2
+        state: "present"
+      register: result
+    - name: "assert update Spanner instance successful"
+      assert:
+        that:
+          - 'result.changed == True'
+          - 'result.previous_values'
+          - 'result.previous_values["instance"]["node_count"] == 1'
+

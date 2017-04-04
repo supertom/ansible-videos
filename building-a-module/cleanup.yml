@@ -1,0 +1,46 @@
+- name: Create Spanner Instance and Database
+  hosts: localhost
+  vars_files:
+    - ../gce_vars/auth
+    - ../infra_vars/spanner-prod
+  tasks:
+    # ============================================================
+    - name: "Delete Spanner Database (state==absent)"
+      gcspanner:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        instance_id: "{{ instance_id }}"
+        database_name: "{{ database_name }}"
+        configuration: "{{ configuration }}"
+        state: "absent"
+      register: result
+      tags:
+        - delete
+    - name: "assert Spanner database delete successful"
+      tags:
+        - delete
+      assert:
+        that:
+          - 'result.state == "absent"'
+    # ============================================================
+    - pause: seconds=15
+    # ============================================================
+    - name: "Delete Spanner Instance (state==absent)"
+      gcspanner:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        instance_id: "{{ instance_id }}"
+        configuration: "{{ configuration }}"
+        force_instance_delete: yes
+        state: "absent"
+      register: result
+      tags:
+        - delete
+    - name: "assert Spanner instance delete successful"
+      tags:
+        - delete
+      assert:
+        that:
+          - 'result.state == "absent"'

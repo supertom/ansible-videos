@@ -1,0 +1,4 @@
+# spanner-prod
+instance_id: "spacecloud-prod-instance"
+database_name: "prod"
+configuration: "us-central1"
