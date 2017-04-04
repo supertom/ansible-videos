@@ -1,8 +1,8 @@
 - name: Build Global IVA Space Site
   hosts: localhost
   vars_files:
-    - ../gce_vars/auth
-    - ../app_vars/iva-prod
+    - gce_vars/auth
+    - app_vars/iva-prod
   tasks:
     # ============================================================
     # Create MIG one

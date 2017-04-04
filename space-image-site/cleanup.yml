@@ -1,8 +1,8 @@
 - name: Tear down Global IVA Space Site
   hosts: localhost
   vars_files:
-    - ../gce_vars/auth
-    - ../app_vars/iva-prod
+    - gce_vars/auth
+    - app_vars/iva-prod
   tasks:
     # ============================================================
     # Delete Global Forwarding Rule
@@ -145,7 +145,7 @@
             port: "{{ http_port }}"
         autoscaling:
           enabled: yes
-          name: "{{ mig_one }}"
+          name: "{{ mig_two }}"
           policy:
             min_instances: 2
             max_instances: 10
