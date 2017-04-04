@@ -4,7 +4,7 @@
   hosts: localhost
   gather_facts: False
   vars_files:
-    - ../app_vars/camera-test
+    - app_vars/camera-test
   tasks:
     - name: Delete existing file if present
       file:

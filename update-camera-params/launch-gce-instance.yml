@@ -4,9 +4,9 @@
   hosts: localhost
   gather_facts: False
   vars_files:
-    - ../gce_vars/auth
-    - ../gce_vars/machines
-    - ../gce_vars/zonea
+    - gce_vars/auth
+    - gce_vars/machines
+    - gce_vars/zonea
   tasks:
     - name: Bring up the instances for testing
       gce:
