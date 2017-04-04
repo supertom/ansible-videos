@@ -6,7 +6,7 @@ Note: this is demo info only and this readme could be out of date.  Source of tr
 * update-camera-params - launch multiple instances with custom image. Run a test with parameters we send in.  If successful, write ini file and push to Groundstation.
 
 ## Episode 2
-* load-balancing - create a cross-region load balanced web application.
+* space-image-site - create a cross-region load balanced web application.
 
 ## Episode 3
 * networking - set up networks and firewall rules for our RGS to IPS network and our IPS to IVA network.
