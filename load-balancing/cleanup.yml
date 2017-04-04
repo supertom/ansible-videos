@@ -4,6 +4,24 @@
     - ../gce_vars/auth
     - ../app_vars/iva-prod
   tasks:
+    # # ============================================================
+    # # Delete URLMap
+    # # ============================================================
+    # - name: Delete URLMap
+    #   gcp_url_map:
+    #     service_account_email: "{{ service_account_email }}"
+    #     credentials_file: "{{ credentials_file }}"
+    #     project_id: "{{ project_id }}"
+    #     url_map_name: "{{ urlmap }}"
+    #     default_service: "{{ bes }}"
+    #     state: "absent"
+    #   register: result
+    # - name: "assert urlmap present"
+    #   assert:
+    #     that:
+    #       - 'result.state == "absent"'
+    # - pause: seconds=10
+
     # ============================================================
     # Delete Backend Service
     # ============================================================

@@ -60,23 +60,23 @@
         that:
           # - 'result.changed'
           - 'result.state == "present"'
-#     # ============================================================
-#     # Create URLMap TODO(supertom): fix
-#     # ============================================================
-#     - name: Create URLMap
-#       gce_net_urlmap:
-#         service_account_email: "{{ service_account_email }}"
-#         credentials_file: "{{ credentials_file }}"
-#         project_id: "{{ project_id }}"
-#         name: "{{ urlmap }}"
-#         default_service: "{{ bes }}"
-#         state: "present"
-#       register: result
-#     - name: "assert urlmap present"
-#       assert:
-#         that:
-# #          - 'result.changed'
-#           - 'result.state == "present"'
+    # ============================================================
+    # Create URLMap
+    # ============================================================
+    - name: Create URLMap
+      gcp_url_map:
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        url_map_name: "{{ urlmap }}"
+        default_service: "{{ bes }}"
+        state: "present"
+      register: result
+    - name: "assert urlmap present"
+      assert:
+        that:
+          - 'result.changed'
+          - 'result.state == "present"'
 
 #     # ============================================================
 #     # Create TargetProxy
