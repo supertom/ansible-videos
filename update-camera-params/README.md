@@ -2,7 +2,7 @@
 
 ## Run
 
- `ansible-playbook push-camera-params.yml -vvv | tee /tmp/cam-output.log`
+ `ansible-playbook push-camera-params.yml -v`
 
 ## Cleanup
 
