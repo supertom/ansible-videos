@@ -15,7 +15,16 @@
         name: "{{ mig_one }}"
         zone: "{{ mig_one_zone }}"
         state: "present"
-        size: 1
+        size: 2
+        autoscaling:
+          enabled: yes
+          name: "{{ mig_one }}"
+          policy:
+            min_instances: 2
+            max_instances: 10
+            cool_down_period: 30
+            cpu_utilization:
+              target: 0.02
         template: "{{ instance_template }}"
         named_ports:
           - name: "{{ http_port_name }}"
@@ -31,7 +40,16 @@
         name: "{{ mig_two }}"
         zone: "{{ mig_two_zone }}"
         state: "present"
-        size: 1
+        size: 2
+        autoscaling:
+          enabled: yes
+          name: "{{ mig_two }}"
+          policy:
+            min_instances: 2
+            max_instances: 10
+            cool_down_period: 30
+            cpu_utilization:
+              target: 0.02
         template: "{{ instance_template }}"
         named_ports:
           - name: "{{ http_port_name }}"
@@ -47,6 +65,8 @@
         backend_service_name: "{{ bes }}"
         backends:
           - instance_group: "{{ mig_one }}"
+            balancing_mode: RATE
+            max_rate_per_instance: 10.00
           - instance_group: "{{ mig_two }}"
         healthchecks:
           - "{{ bes_healthcheck }}"
@@ -58,7 +78,6 @@
     - name: "assert backend service present"
       assert:
         that:
-          # - 'result.changed'
           - 'result.state == "present"'
     # ============================================================
     # Create URLMap
@@ -75,7 +94,6 @@
     - name: "assert urlmap present"
       assert:
         that:
-          - 'result.changed'
           - 'result.state == "present"'
 
     # ============================================================
@@ -93,7 +111,6 @@
     - name: "assert targethttpproxy present"
       assert:
         that:
-#          - 'result.changed'
           - 'result.state == "present"'
 
     # ============================================================
@@ -111,7 +128,6 @@
     - name: "assert static address present"
       assert:
         that:
-#          - 'result.changed'
           - 'result.state == "present"'
 
     # ============================================================
@@ -132,6 +148,5 @@
     - name: "assert gfr present"
       assert:
         that:
-#          - 'result.changed'
           - 'result.state == "present"'
 
