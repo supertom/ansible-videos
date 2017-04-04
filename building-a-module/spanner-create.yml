@@ -1,8 +1,8 @@
 - name: Create Spanner Instance and Database
   hosts: localhost
   vars_files:
-    - ../gce_vars/auth
-    - ../infra_vars/spanner-prod
+    - gce_vars/auth
+    - infra_vars/spanner-prod
   tasks:
     # ============================================================
     - name: "Create Spanner Instance (state==present)"

@@ -1,8 +1,8 @@
 - name: RGS/IPS Network (prod)
   hosts: localhost
   vars_files:
-    - ../gce_vars/auth
-    - ../infra_vars/network-prod
+    - gce_vars/auth
+    - infra_vars/network-prod
   tasks:
       - name: Create RGS-IPS network
         gce_net:
