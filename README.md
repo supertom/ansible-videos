@@ -2,6 +2,10 @@
 
 Note: this is demo info only and this readme could be out of date.  Source of truth for the videos is the internal docs and respective scripts.
 
+Required:
+* Python modules: google-api-python-client, google-cloud-spanner
+* Other: gcp.py placed at lib/ansible/module_utils/gcp.py
+
 ## Episode 1
 * update-camera-params - launch multiple instances with custom image. Run a test with parameters we send in.  If successful, write ini file and push to Groundstation.
 

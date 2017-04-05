@@ -19,10 +19,10 @@
         region: global
         state: "absent"
       register: result
+      ignore_errors: true
     - name: "assert gfr absent"
       assert:
         that:
-#          - 'result.changed'
           - 'result.state == "absent"'
     # ============================================================
     # Delete Static Address
@@ -36,6 +36,7 @@
         region: global
         state: "absent"
       register: result
+      ignore_errors: true
     - name: "assert static address absent"
       assert:
         that:
@@ -54,6 +55,7 @@
         urlmap: "{{ urlmap }}"
         state: "absent"
       register: result
+      ignore_errors: true
     - name: "assert targethttpproxy absent"
       assert:
         that:
@@ -72,6 +74,7 @@
         default_service: "{{ bes }}"
         state: "absent"
       register: result
+      ignore_errors: true
     - name: "assert urlmap absent"
       assert:
         that:
