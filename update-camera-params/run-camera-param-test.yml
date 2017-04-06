@@ -1,6 +1,6 @@
 ---
-# Execute the params on multiple hosts and ensure they call pass
-- name: Run camera param test
+# Execute the param tests on multiple hosts and ensure they all pass
+- name: Run camera param tests
   hosts: camera_test_instances
   gather_facts: False
   vars_files:
@@ -8,7 +8,7 @@
     - gce_vars/zonea
     - app_vars/camera-test
   tasks:
-    - name: "Run test"
+    - name: "Run camera parameter tests"
       command: '/usr/local/bin/test-camera-params camA="{{cameraA}}" camB="{{cameraB}}" camC="{{cameraC}}"'
       register: result
     - name: debug
