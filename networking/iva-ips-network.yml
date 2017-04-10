@@ -1,13 +1,12 @@
-- name: Compute Engine Network
+- name: Compute Engine IVA-IPS Network
   hosts: localhost
   vars_files:
     - ../gce_vars/auth
     - ../infra_vars/network-prod
   tasks:
-      - name: Create IPV-IPS network
+      - name: Create IVA-IPS network
         gce_net:
           name: "{{ iva_ips_network_name }}"
-          ipv4_range: "{{ iva_ips_ip4_range }}"
           mode: auto
           state: "present"
           project_id: "{{ project_id }}"

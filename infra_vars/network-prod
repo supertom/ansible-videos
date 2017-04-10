@@ -12,7 +12,6 @@ rgs_ips_fw_ssh_src_range: '10.2.1.1/32'
 
 ## IPS <==> IVA
 iva_ips_network_name: ips-ipv-prod
-iva_ips_ip4_range: 10.10.1.0/24
 
 ## firewall rules for IVA <==> IPS
 iva_ips_fw_ssh_name: iva-ips-fw-ssh
