@@ -24,7 +24,7 @@
         gce_net:
           name: "{{ rgs_ips_network_name }}"
           fwname: "{{ rgs_ips_fw_ssh_name }}"
-          allowed: tcp:22;tcp:1234
+          allowed: tcp:22
           state: "present"
           target_tags: "{{ rgs_ips_fw_ssh_target_tags }}"
           src_range: ["{{ rgs_ips_fw_ssh_src_range }}"]
@@ -35,5 +35,4 @@
       - name: "assert fw created"
         assert:
           that:
-            - 'result.changed'
             - 'result.state == "present"'

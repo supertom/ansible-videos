@@ -4,7 +4,7 @@
     - gce_vars/auth
     - infra_vars/spanner-prod
   tasks:
-    # ============================================================
+    ============================================================
     - name: "Delete Spanner Database (state==absent)"
       gcspanner:
         service_account_email: "{{ service_account_email }}"
@@ -24,7 +24,7 @@
         that:
           - 'result.state == "absent"'
     # ============================================================
-    - pause: seconds=15
+    - pause: seconds=5
     # ============================================================
     - name: "Delete Spanner Instance (state==absent)"
       gcspanner:
