@@ -9,3 +9,9 @@ Local directory /opt/rgs/conf needs to be in place and writable by your user (at
 /etc/ansible/hosts - put this host file in place to keep the host warning from appearing
 
 Other: gcp.py placed at lib/ansible/module_utils/gcp.py
+
+Instance Template called iva-template needs to be in the project.  The following startup script needs to be set:
+```
+apt-get update && apt-get install -y apache2; zone=$(curl -s -H "Metadata-flavor: Google" http://metadata/computeMetadata/v1/instance/zone); hostname=$(curl -s -H "Metadata-flavor: Google" http://metadata/computeMetadata/v1/instance/name);echo ${zone}:${hostname} > /var/www/html/index.html
+
+```
