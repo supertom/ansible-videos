@@ -9,6 +9,10 @@ Required:
 * Other: gcp.py placed at lib/ansible/module_utils/gcp.py
 * See the 'other' directory for more files that need to be in place.
 
+Files to be edited:
+- gce_vars/auth - put your project credentials in here
+- group_vars/all - username and ssh key location here
+
 ## Episode 1
 * update-camera-params - launch multiple instances with custom image. Run a test with parameters we send in.  If successful, write ini file and push to Groundstation.
 
