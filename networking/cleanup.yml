@@ -58,7 +58,6 @@
       - name: Delete IVA-IPS network
         gce_net:
           name: "{{ iva_ips_network_name }}"
-          ipv4_range: "{{ iva_ips_ip4_range }}"
           state: "absent"
           project_id: "{{ project_id }}"
           credentials_file: "{{ credentials_file }}"
