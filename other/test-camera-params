@@ -1,0 +1,11 @@
+#!/bin/bash
+for p in $@
+do
+  echo -n "Setting $p..."
+  echo "done"
+done
+
+echo -n "Validating parameters..."
+sleep 1
+echo "done"
+echo "Parameters $@ passed successfully"

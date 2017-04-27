@@ -4,7 +4,10 @@ Note: this is demo info only and this readme could be out of date.  Source of tr
 
 Required:
 * Python modules: google-api-python-client, google-cloud-spanner
+* An image named camera-test-image with the test-camera-params executable is required in the project for the first video
+* An image template is required for the second video.
 * Other: gcp.py placed at lib/ansible/module_utils/gcp.py
+* See the 'other' directory for more files that need to be in place.
 
 ## Episode 1
 * update-camera-params - launch multiple instances with custom image. Run a test with parameters we send in.  If successful, write ini file and push to Groundstation.
