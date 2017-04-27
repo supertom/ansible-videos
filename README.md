@@ -9,6 +9,8 @@ Required:
 * A port 80 healthcheck called iva-healthcheck is needed for the second video.
 * Other: gcp.py placed at lib/ansible/module_utils/gcp.py
 * See the 'other' directory for more files that need to be in place.
+* Compute Engine API needs to be [enabled.](https://console.cloud.google.com/apis/api/compute-component.googleapis.com/overview)
+* Spanner API needs to be [enabled](https://console.cloud.google.com/apis/api/spanner.googleapis.com/overview)
 
 Files to be edited:
 - gce_vars/auth - put your project credentials in here
