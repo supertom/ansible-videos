@@ -3,7 +3,7 @@
 Note: this is demo info only and this readme could be out of date.  Source of truth for the videos is the internal docs and respective scripts.
 
 Required:
-* Python modules: google-api-python-client, google-cloud-spanner
+* Python modules: google-api-python-client, google-cloud-spanner, google_auth_httplib2
 * An image named camera-test-image with the test-camera-params executable is required in the project for the first video
 * An image template is required for the second video.
 * A port 80 healthcheck called iva-healthcheck is needed for the second video.
