@@ -6,6 +6,7 @@ Required:
 * Python modules: google-api-python-client, google-cloud-spanner
 * An image named camera-test-image with the test-camera-params executable is required in the project for the first video
 * An image template is required for the second video.
+* A port 80 healthcheck called iva-healthcheck is needed for the second video.
 * Other: gcp.py placed at lib/ansible/module_utils/gcp.py
 * See the 'other' directory for more files that need to be in place.
 
